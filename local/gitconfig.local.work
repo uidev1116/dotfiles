@@ -1,0 +1,4 @@
+# 会社PC用 ~/.gitconfig.local
+# このファイルを ~/.gitconfig.local としてコピーして使う
+[user]
+    email = ui@appleple.com

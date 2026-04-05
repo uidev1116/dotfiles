@@ -1,0 +1,15 @@
+[user]
+    name = 宇井 陸登
+[color]
+    ui = auto
+[core]
+    excludesfile = ~/.gitignore_global
+[safe]
+    bareRepository = explicit
+[url "github:"]
+    InsteadOf = https://github.com/
+    InsteadOf = git@github.com:
+[init]
+    defaultBranch = main
+[include]
+    path = ~/.gitconfig.local

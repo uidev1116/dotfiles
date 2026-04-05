@@ -1,0 +1,4 @@
+# 個人PC用 ~/.gitconfig.local
+# このファイルを ~/.gitconfig.local としてコピーして使う
+[user]
+    email = uidev1116@gmail.com

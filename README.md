@@ -1,0 +1,44 @@
+# dotfiles
+
+## セットアップ手順
+
+```bash
+git clone git@github.com:uidev1116/dotfiles.git ~/dotfiles
+cd ~/dotfiles
+bash install.sh
+```
+
+## install.sh 実行後の手動作業
+
+### 個人PCの場合
+
+```bash
+cp ~/dotfiles/local/gitconfig.local.personal ~/.gitconfig.local
+cp ~/dotfiles/local/zshrc.local.personal ~/.zshrc.local
+```
+
+### 会社PCの場合
+
+```bash
+cp ~/dotfiles/local/gitconfig.local.work ~/.gitconfig.local
+cp ~/dotfiles/local/zshrc.local.work ~/.zshrc.local
+```
+
+## 管理対象ファイル
+
+| ファイル | 説明 |
+|---|---|
+| `gitconfig` | Git共通設定（名前・カラー・includeのみ） |
+| `gitignore_global` | グローバルgitignore |
+| `claude/CLAUDE.md` | Claude Code グローバル指示 |
+| `zshrc.common` | zsh共通設定（zprezto・Kiro CLI） |
+| `local/*.personal` | 個人PC用設定サンプル |
+| `local/*.work` | 会社PC用設定サンプル |
+
+## dotfilesに含めないもの（各PCで手動管理）
+
+| ファイル | 内容 |
+|---|---|
+| `~/.gitconfig.local` | メールアドレス（PC固有） |
+| `~/.zshrc.local` | Node管理ツール等（PC固有） |
+| `~/.ssh/` | 秘密鍵（絶対にGit管理しない） |
