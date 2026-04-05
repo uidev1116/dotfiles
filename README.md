@@ -30,7 +30,6 @@ cp ~/dotfiles/local/zshrc.local.work ~/.zshrc.local
 
 | ファイル | 説明 |
 |---|---|
-| `.gitignore` | このリポジトリ用gitignore |
 | `gitconfig` | Git共通設定 |
 | `gitignore.global` | グローバルgitignore |
 | `claude/CLAUDE.md` | Claude Code グローバル指示 |
