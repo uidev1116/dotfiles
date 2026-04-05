@@ -29,7 +29,9 @@ link "$DOTFILES/gitignore_global" "$HOME/.gitignore_global"
 
 # claude
 mkdir -p "$HOME/.claude"
-link "$DOTFILES/claude/CLAUDE.md" "$HOME/.claude/CLAUDE.md"
+link "$DOTFILES/claude/CLAUDE.md"             "$HOME/.claude/CLAUDE.md"
+link "$DOTFILES/claude/settings.json"         "$HOME/.claude/settings.json"
+link "$DOTFILES/claude/statusline-command.sh" "$HOME/.claude/statusline-command.sh"
 
 echo ""
 echo "=== 手動セットアップが必要なファイル ==="

@@ -33,6 +33,8 @@ cp ~/dotfiles/local/zshrc.local.work ~/.zshrc.local
 | `gitconfig` | Git共通設定 |
 | `gitignore_global` | グローバルgitignore |
 | `claude/CLAUDE.md` | Claude Code グローバル指示 |
+| `claude/settings.json` | Claude Code 設定（hooks・statusLine等） |
+| `claude/statusline-command.sh` | ステータスライン表示スクリプト |
 | `zshrc.common` | zsh共通設定（zprezto・Kiro CLI） |
 | `zprezto/` | zshフレームワーク（git submodule） |
 | `local/*.personal` | 個人PC用設定サンプル |
