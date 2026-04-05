@@ -41,10 +41,12 @@ cp ~/dotfiles/local/zshrc.local.work ~/.zshrc.local
 | `local/*.personal` | 個人PC用設定サンプル |
 | `local/*.work` | 会社PC用設定サンプル |
 
-## dotfilesに含めないもの（各PCで手動管理）
+## シンボリックリンクではなくコピーして使うもの
+
+`local/` 配下にサンプルを管理。各PCで `~/.gitconfig.local` / `~/.zshrc.local` としてコピーして使う。
+
+## Gitで管理しないもの
 
 | ファイル | 内容 |
 |---|---|
-| `~/.gitconfig.local` | メールアドレス（PC固有） |
-| `~/.zshrc.local` | Node管理ツール等（PC固有） |
 | `~/.ssh/` | 秘密鍵（絶対にGit管理しない） |
