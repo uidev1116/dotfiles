@@ -9,6 +9,20 @@ link() {
 
 echo "=== dotfiles install ==="
 
+# submoduleの初期化
+git -C "$DOTFILES" submodule update --init --recursive
+
+# zprezto
+link "$DOTFILES/zprezto" "$HOME/.zprezto"
+
+# zpreztoのruncoms（zshrc以外）をリンク
+for rcfile in "$DOTFILES/zprezto/runcoms"/z(^shrc); do
+  link "$rcfile" "$HOME/.${rcfile:t}"
+done
+
+# zshrc（共通設定）
+link "$DOTFILES/zshrc.common" "$HOME/.zshrc"
+
 # gitconfig
 link "$DOTFILES/gitconfig"        "$HOME/.gitconfig"
 link "$DOTFILES/gitignore_global" "$HOME/.gitignore_global"
@@ -16,9 +30,6 @@ link "$DOTFILES/gitignore_global" "$HOME/.gitignore_global"
 # claude
 mkdir -p "$HOME/.claude"
 link "$DOTFILES/claude/CLAUDE.md" "$HOME/.claude/CLAUDE.md"
-
-# zshrc (zprezto経由で読み込む)
-link "$DOTFILES/zshrc.common" "$HOME/.zprezto/runcoms/zshrc"
 
 echo ""
 echo "=== 手動セットアップが必要なファイル ==="
