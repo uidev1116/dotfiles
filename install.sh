@@ -25,7 +25,7 @@ link "$DOTFILES/zshrc.common" "$HOME/.zshrc"
 
 # gitconfig
 link "$DOTFILES/gitconfig"        "$HOME/.gitconfig"
-link "$DOTFILES/gitignore_global" "$HOME/.gitignore_global"
+link "$DOTFILES/gitignore.global" "$HOME/.gitignore.global"
 
 # claude
 mkdir -p "$HOME/.claude"

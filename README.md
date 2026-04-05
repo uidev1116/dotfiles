@@ -31,7 +31,7 @@ cp ~/dotfiles/local/zshrc.local.work ~/.zshrc.local
 | ファイル | 説明 |
 |---|---|
 | `gitconfig` | Git共通設定 |
-| `gitignore_global` | グローバルgitignore |
+| `gitignore.global` | グローバルgitignore |
 | `claude/CLAUDE.md` | Claude Code グローバル指示 |
 | `claude/settings.json` | Claude Code 設定（hooks・statusLine等） |
 | `claude/statusline-command.sh` | ステータスライン表示スクリプト |

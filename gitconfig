@@ -3,7 +3,7 @@
 [color]
     ui = auto
 [core]
-    excludesfile = ~/.gitignore_global
+    excludesfile = ~/.gitignore.global
 [safe]
     bareRepository = explicit
 [url "github:"]
