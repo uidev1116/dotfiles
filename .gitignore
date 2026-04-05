@@ -1,0 +1,8 @@
+# macOS
+.DS_Store
+
+# Backup files
+*.bak
+
+# Claude Code project-specific settings (not the managed claude/ directory)
+.claude/
