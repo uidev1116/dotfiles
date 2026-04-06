@@ -7,6 +7,14 @@ link() {
   ln -sf "$1" "$2" && echo "✓ Linked: $2"
 }
 
+# ディレクトリをシンボリックリンクで置き換える（既存ディレクトリは削除してからリンク）
+link_dir() {
+  if [ -d "$2" ] && [ ! -L "$2" ]; then
+    rm -rf "$2"
+  fi
+  ln -sf "$1" "$2" && echo "✓ Linked: $2"
+}
+
 echo "=== dotfiles install ==="
 
 # submoduleの初期化
@@ -32,6 +40,24 @@ mkdir -p "$HOME/.claude"
 link "$DOTFILES/claude/CLAUDE.md"             "$HOME/.claude/CLAUDE.md"
 link "$DOTFILES/claude/settings.json"         "$HOME/.claude/settings.json"
 link "$DOTFILES/claude/statusline-command.sh" "$HOME/.claude/statusline-command.sh"
+
+# npmrc
+link "$DOTFILES/npmrc" "$HOME/.npmrc"
+
+# pnpm
+mkdir -p "$HOME/Library/Preferences/pnpm"
+link "$DOTFILES/pnpm/rc" "$HOME/Library/Preferences/pnpm/rc"
+
+# agents/skills（スキルの実体）
+mkdir -p "$HOME/.agents"
+link_dir "$DOTFILES/agents/skills" "$HOME/.agents/skills"
+
+# ~/.cursor/skills → ~/.agents/skills
+mkdir -p "$HOME/.cursor"
+link_dir "$HOME/.agents/skills" "$HOME/.cursor/skills"
+
+# ~/.claude/skills → ~/.agents/skills
+link_dir "$HOME/.agents/skills" "$HOME/.claude/skills"
 
 echo ""
 echo "=== 手動セットアップが必要なファイル ==="
