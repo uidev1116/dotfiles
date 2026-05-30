@@ -6,41 +6,159 @@ disable-model-invocation: true
 
 # Generate PR Description
 
-## Overview
+## 目的
 
-Create a comprehensive pull request description based on the changes in this branch and format it as proper markdown for use in a GitHub PR description.
+このブランチの変更内容をもとに、**フロントエンド中心のメンバーやバックエンドが苦手なエンジニアでも読んで理解できる PR 説明文**を日本語で生成します。GitHub/Bitbucket の PR 本文として貼り付けて使う想定です。
 
-**IMPORTANT: Output the PR description directly in the chat response. Do NOT create or write to any markdown files. The user will copy and paste the output as needed.**
+**出力はチャットに直接表示してください。ファイルは作らないでください**（ユーザーが PR 画面にコピペします）。
 
-## Steps
+## 読者を意識する
 
-1. **Summary**
-    - Provide a clear, concise summary of what this PR accomplishes
-2. **Changes Made**
-    - List the key changes made in this PR
-    - Include both code and non-code changes
-    - Highlight any breaking changes
-3. **Testing**
-    - Describe how the changes were tested
-    - Include any new test cases added
-    - Note any manual testing performed
-4. **Related Issues**
-    - Link to any related issues or tickets
-    - Use closing keywords if this PR resolves issues
-5. **Additional Notes**
-    - Any deployment considerations
-    - Follow-up work required
-    - Notes for reviewers
+読者はフロントエンド中心のメンバー、またはバックエンドが苦手なエンジニアです。彼らが読んで困るのは次のようなケースです：
 
-## Generate PR Description Checklist
+- クラス名・関数名・内部機構の名前など、技術用語がいきなり出てくる
+- 「何が変わるのか」「ユーザーにどう見えるのか」が書かれていない
+- 仕組みの説明ばかりで、自分が何に気をつければいいかわからない
 
-- [ ] Provided clear, concise summary of what this PR accomplishes
-- [ ] Listed all key changes made in this PR
-- [ ] Highlighted any breaking changes
-- [ ] Described how the changes were tested
-- [ ] Included any new test cases added
-- [ ] Noted any manual testing performed
-- [ ] Linked to any related issues or tickets
-- [ ] Included any deployment considerations
-- [ ] Noted any follow-up work required
-- [ ] Formatted as proper markdown for GitHub PR
+なので、**仕組みより先に「何が起きていたか」「何が変わるか」を普通の言葉で説明する** ことを最優先にしてください。読者が全員バックエンドの内部構造を知っている前提では書かないこと。
+
+## ステップ
+
+### 1. ブランチの変更内容を把握する
+
+以下のコマンドで情報を集めます（並列実行可）：
+
+- `git log --oneline <base-branch>..HEAD` — コミット履歴
+- `git diff <base-branch>...HEAD` — 差分全体
+- `git diff <base-branch>...HEAD --stat` — 変更ファイル一覧
+
+base-branch は通常 `develop/<バージョン識別子>`（例: `develop/302x`）。プロジェクトの `AGENTS.md` や `cms-development-workflow` スキルの規則に従ってください。
+
+### 2. Jira チケット番号を特定する
+
+次の順で探します：
+
+1. コミットメッセージから `CMS-XXXX` を grep
+2. ブランチ名から抽出（ブランチ名に番号が入っていないケースもあるので注意）
+3. 見つからなければユーザーに質問
+
+### 3. PR の規模を判定する
+
+| 規模 | 目安 | 使うセクション |
+|------|------|--------------|
+| 小 | 1〜2 ファイル・軽微な fix・タイポ等 | 「どんな変更？」「ユーザーから見た影響」のみ |
+| 中 | 機能修正・複数ファイル・ロジック変更あり | 骨格一式 |
+| 大 | 新機能・大規模リファクタ・テスト大量追加 | 骨格 + テスト詳細 + レビュー観点 |
+
+規模を決めたら、以降のセクションを全部埋めるのではなく、**その PR に必要なセクションだけ**使ってください。空セクションを残さないこと。
+
+### 4. 骨格に沿って本文を書く
+
+#### タイトル（H1）
+
+```
+# CMS-XXXX <チケットの要約>
+```
+
+#### 冒頭（必須）
+
+Jira リンクを 1 行で置きます。
+
+```markdown
+Jira: [CMS-XXXX: <要約>](https://jira.appleple.com/browse/CMS-XXXX)
+```
+
+#### セクション骨格（問いかけ形式の見出し）
+
+読者目線の問いかけを見出しにします。状況に応じて言い換えてください。
+
+**バグ修正の場合**:
+
+- `## どんな不具合？` — 症状を普通の言葉で。コードを知らなくても再現イメージが浮かぶように
+- `### 影響を受けるのはどこ？` — 対象モジュール・画面・条件を具体名で。該当する実例（ファイル名）も出す
+- `## なぜ起きていた？` — 「ざっくり言うと」で始めて 1 文で原因を要約 → 必要なら詳細
+- `## 何を直した？` — 修正を番号付きで。本題 / ついで直した小さい不具合 / テスト の順で分ける
+- `## どのテストで保証している？` — テストを追加した場合のみ。後述のコツに従って書く
+- `## ユーザーから見た影響` — 必須。直った後の挙動と、注意点
+
+**機能追加の場合**:
+
+- `## 何ができるようになる？`
+- `## なぜ必要？`
+- `## どう実現した？`
+- `## 使い方 / テンプレ例` — ユーザー向けインターフェース（テンプレタグ・管理画面項目など）がある場合
+- `## ユーザーから見た影響` — 必須
+
+### 5. 文章の書き方のコツ
+
+#### 技術用語は「役割の説明 + 実装名」で併記する
+
+フロントの読者にとって `$Tpl` や `ApiEngine` はただの記号なので、**日本語で役割を書いて、実装名は ``バッククォート`` で添える** 形にします。
+
+悪い例:
+> `buildModuleField` で追加された `$moduleField` が `ApiEngine::render()` で失われる
+
+良い例:
+> **カスタムフィールドを追加する仕組み (`buildModuleField`) と、出力を組み立てる仕組み (`$Tpl->render()`) を両方使っている** モジュールで発生する
+
+#### セクション冒頭で「ざっくり言うと」で 1 文要約する
+
+原因や仕組みの説明は長くなりがち。**セクションの最初で 1 文のサマリを出し、詳細は後から** という順で書いてください。詳細まで読まなくても、読者が要点だけ持ち帰れるようにします。
+
+例:
+> ざっくり言うと、**API 用の出力エンジンが「追加済みのデータ」を忘れて「あとから渡された引数」しか JSON に含めなかった** のが原因です。
+
+#### Before/After や条件分岐は箇条書きで対比する
+
+差分を視覚化するために、箇条書きで並列表示します。末尾に `← ここがズレていた` のように注目ポイントを添えると読みやすい。
+
+例:
+
+```
+- 通常のテンプレート出力: 追加済みデータ + 引数 → 両方ちゃんと出力される
+- API の JSON 出力: 引数だけ出力される（追加済みデータは捨てられる）← ここがズレていた
+```
+
+#### 「ユーザーから見た影響」は必ず書く
+
+修正が正しく動いたとき、利用者（CMS のテーマ開発者、クライアント側開発者、エンドユーザー）からどう見えるかを、**コードの話抜きで** 書きます。
+
+含める内容:
+
+- 何が直ったか / 何ができるようになったか
+- 既存実装への影響（破壊的変更・要注意事項があるか）
+- 必要なら「こういう前提でコードを書いている人は注意」のような条件付きの注意書き
+
+### 6. テスト関連の書き方
+
+テストをたくさん追加した場合は、**テストメソッド名を列挙するだけでなく、何を保証しているかを日本語で 1 行添える** こと。フロントの人がテストコードを読まなくても、CI で何が守られているかが伝わるようにします。
+
+例:
+
+```
+- `render_mergesBlockDataWithArgument` — 追加済みデータと引数がちゃんと両方出る
+- `render_argumentOverridesAddedBlockDataOnKeyCollision` — 同じキーなら引数が優先される
+```
+
+テストが多い場合は、保証したい挙動のグループでサブセクションに分けてください（例: 「本題」「回帰防止」「境界ケース」）。少数（3 件程度）しかないならサブセクション不要。
+
+## チェックリスト
+
+出力前に必ず自己確認してください：
+
+- [ ] タイトルに `CMS-XXXX` が含まれている
+- [ ] 冒頭に Jira リンクがある
+- [ ] 技術用語には日本語の役割説明を添えた
+- [ ] 原因・仕組み説明の冒頭に「ざっくり言うと」相当の 1 文要約がある
+- [ ] Before/After や条件分岐の説明は対比の箇条書きで書いた
+- [ ] 「ユーザーから見た影響」セクションがある（コードの話ではなく利用者目線で）
+- [ ] テストを追加した場合、日本語で何を保証しているか併記した
+- [ ] 空のセクションを残していない（PR の規模に合っていない見出しは削除）
+- [ ] 英語混じりになっていない（固有名詞・コード識別子を除く）
+
+## 注意
+
+- 出力はチャットに直接表示してください。**ファイルを作らないこと**。
+- 英語で書かないこと。日本語で生成してください（関数名やクラス名などの識別子はそのまま）。
+- 既存コードで「なぜそうなっていたか」の歴史的経緯がわかる場合は、それも書くと読みやすくなります。わからなければ無理に推測せず省略してください。
+- コミットメッセージと差分だけで分からない部分は、ユーザーに質問してください。捏造は禁止です。
