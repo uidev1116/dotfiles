@@ -8,12 +8,15 @@ link() {
   ln -sf "$1" "$2" && echo "✓ Linked: $2"
 }
 
-# ディレクトリをシンボリックリンクで置き換える（既存ディレクトリは削除してからリンク）
+# ディレクトリをシンボリックリンクで置き換える
+#   再実行を冪等にし、ln -sf がリンク先ディレクトリの「中に」作ってしまう罠を回避する
 link_dir() {
-  if [ -d "$2" ] && [ ! -L "$2" ]; then
-    rm -rf "$2"
+  if [ -L "$2" ]; then
+    rm -f "$2"        # 既存のシンボリックリンクは外す
+  elif [ -d "$2" ]; then
+    rm -rf "$2"       # 実ディレクトリは中身ごと削除
   fi
-  ln -sf "$1" "$2" && echo "✓ Linked: $2"
+  ln -s "$1" "$2" && echo "✓ Linked: $2"
 }
 
 echo "=== dotfiles install ==="
@@ -21,17 +24,19 @@ echo "=== dotfiles install ==="
 # submoduleの初期化
 git -C "$DOTFILES" submodule update --init --recursive
 
-# zprezto
-link "$DOTFILES/zprezto" "$HOME/.zprezto"
+# zprezto（ディレクトリなので link_dir で冪等にリンク）
+link_dir "$DOTFILES/zprezto" "$HOME/.zprezto"
 
-# zpreztoのruncoms（zshrc以外）をリンク（zshrc は zshrc.common を使うため除外）
+# zpreztoのruncoms（zshrc・zpreztorc 以外）をリンク
+#   zshrc → zshrc.common / zpreztorc → カスタム版(dotfiles/zpreztorc) を使うため除外
 setopt EXTENDED_GLOB
-for rcfile in "$DOTFILES/zprezto/runcoms"/z*~*zshrc(.N); do
+for rcfile in "$DOTFILES/zprezto/runcoms"/z*~*zshrc~*zpreztorc(.N); do
   link "$rcfile" "$HOME/.${rcfile:t}"
 done
 
-# zshrc（共通設定）
+# zshrc（共通設定）/ zpreztorc（テーマ・モジュール設定のカスタム版）
 link "$DOTFILES/zshrc.common" "$HOME/.zshrc"
+link "$DOTFILES/zpreztorc"    "$HOME/.zpreztorc"
 
 # gitconfig
 link "$DOTFILES/gitconfig"        "$HOME/.gitconfig"
