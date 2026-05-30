@@ -16,12 +16,13 @@ zsh install.sh personal   # 個人PC
 
 ## install.sh 実行後の手動作業
 
-### npmrc の認証トークン
+### npm 認証トークン（private 取得・publish 時のみ）
 
-`install.sh` 実行後、`~/.npmrc` に以下を手動で追記してください：
+`~/.npmrc` は `_authToken=${NPM_TOKEN}` を環境変数から展開する。実トークンは
+Git 管理外の `~/.zshrc.local` 等で設定する（public パッケージの取得だけなら不要）：
 
-```
-//registry.npmjs.org/:_authToken=<YOUR_TOKEN>
+```bash
+export NPM_TOKEN="npm_xxxxxxxx"   # npmjs.com で granular access token を発行
 ```
 
 ## 管理対象ファイル
@@ -70,4 +71,4 @@ dotfiles リポジトリ内の `cursor/skills` と `claude/skills` もシンボ�
 | ファイル | 内容 |
 |---|---|
 | `~/.ssh/` | 秘密鍵（絶対にGit管理しない） |
-| `~/.npmrc` の `_authToken` 行 | npm認証トークン（`install.sh`後に手動追記） |
+| `NPM_TOKEN`（環境変数） | npm認証トークン。`~/.zshrc.local` 等で export し `~/.npmrc` が `${NPM_TOKEN}` で展開 |

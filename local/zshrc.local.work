@@ -48,3 +48,6 @@ fi
 
 # 自作コマンド
 [[ -d "$HOME/bin" ]] && export PATH="$HOME/bin:$PATH"
+
+# npm 認証トークン（private 取得・publish 時のみ必要。npmjs.com で granular token を発行）
+# export NPM_TOKEN="npm_xxxxxxxxxxxx"

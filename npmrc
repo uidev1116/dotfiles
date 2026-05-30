@@ -2,3 +2,7 @@ prefix=/Users/uirikuto/.npm-global
 engine-strict=true
 audit=true
 min-release-age=2
+
+# 認証トークンは環境変数 NPM_TOKEN から展開する（実値は Git 管理外で export）。
+# public パッケージの取得だけなら NPM_TOKEN は未設定でよい。
+//registry.npmjs.org/:_authToken=${NPM_TOKEN}
