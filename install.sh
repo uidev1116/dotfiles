@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env zsh
+# 注: runcoms のグロブ `z(^shrc)` と `${rcfile:t}` は zsh 専用記法のため zsh で実行する。
 set -eu
 
 DOTFILES="$(cd "$(dirname "$0")" && pwd)"
@@ -23,8 +24,9 @@ git -C "$DOTFILES" submodule update --init --recursive
 # zprezto
 link "$DOTFILES/zprezto" "$HOME/.zprezto"
 
-# zpreztoのruncoms（zshrc以外）をリンク
-for rcfile in "$DOTFILES/zprezto/runcoms"/z(^shrc); do
+# zpreztoのruncoms（zshrc以外）をリンク（zshrc は zshrc.common を使うため除外）
+setopt EXTENDED_GLOB
+for rcfile in "$DOTFILES/zprezto/runcoms"/z*~*zshrc(.N); do
   link "$rcfile" "$HOME/.${rcfile:t}"
 done
 
@@ -59,17 +61,24 @@ link_dir "$HOME/.agents/skills" "$HOME/.cursor/skills"
 # ~/.claude/skills → ~/.agents/skills
 link_dir "$HOME/.agents/skills" "$HOME/.claude/skills"
 
-echo ""
-echo "=== 手動セットアップが必要なファイル ==="
-echo ""
-echo "以下を参考に各PCで手動作成してください："
-echo ""
-echo "  個人PCの場合："
-echo "    cp $DOTFILES/local/gitconfig.local.personal ~/.gitconfig.local"
-echo "    cp $DOTFILES/local/zshrc.local.personal ~/.zshrc.local"
-echo ""
-echo "  会社PCの場合："
-echo "    cp $DOTFILES/local/gitconfig.local.work ~/.gitconfig.local"
-echo "    cp $DOTFILES/local/zshrc.local.work ~/.zshrc.local"
+# 個人/会社PCのローカル設定（第1引数で profile を指定: personal | work）
+# 指定するとシンボリックリンクで ~/.gitconfig.local / ~/.zshrc.local を張る。
+PROFILE="${1:-}"
+case "$PROFILE" in
+  personal | work)
+    link "$DOTFILES/local/gitconfig.local.$PROFILE" "$HOME/.gitconfig.local"
+    link "$DOTFILES/local/zshrc.local.$PROFILE"     "$HOME/.zshrc.local"
+    ;;
+  "")
+    echo ""
+    echo "（profile 未指定: ローカル設定はスキップしました）"
+    echo "  自動リンクするには: zsh install.sh personal  または  zsh install.sh work"
+    ;;
+  *)
+    echo "未知の profile: '$PROFILE'（personal または work を指定してください）" >&2
+    exit 1
+    ;;
+esac
+
 echo ""
 echo "=== 完了 ==="
