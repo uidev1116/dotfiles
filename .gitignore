@@ -4,5 +4,14 @@
 # Backup files
 *.bak
 
-# Claude Code project-specific settings (not the managed claude/ directory)
+# Claude Code のローカル/プロジェクト固有設定（管理対象の claude/ ディレクトリは別）
 .claude/
+**/settings.local.json
+
+# 認証情報・鍵・トークン（絶対にコミットしない）
+*.token
+*.key
+*.pem
+.credentials.json
+credentials.json
+auth.json
