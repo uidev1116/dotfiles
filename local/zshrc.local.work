@@ -1,26 +1,50 @@
 # 会社PC用 ~/.zshrc.local
-# このファイルを ~/.zshrc.local としてコピーして使う
+# このファイルを ~/.zshrc.local としてリンク（または cp）して使う。
+# Intel / Apple Silicon どちらでも動くよう Homebrew prefix を動的に判定する。
 
-# nodenv
-export PATH="$HOME/.nodenv/bin:$PATH"
-eval "$(nodenv init -)"
+# nodenv（インストール済みの場合のみ）
+if [[ -d "$HOME/.nodenv" ]]; then
+  export PATH="$HOME/.nodenv/bin:$PATH"
+  eval "$(nodenv init -)"
+fi
 
 # npm global
 export PATH="$HOME/.npm-global/bin:$PATH"
 
-# grep (GNU)
-export PATH="/opt/homebrew/opt/grep/libexec/gnubin:$PATH"
+# Homebrew 関連（Intel: /usr/local, Apple Silicon: /opt/homebrew を自動判定）
+if command -v brew >/dev/null 2>&1; then
+  BREW_PREFIX="$(brew --prefix)"
+
+  # GNU grep
+  [[ -d "$BREW_PREFIX/opt/grep/libexec/gnubin" ]] && \
+    export PATH="$BREW_PREFIX/opt/grep/libexec/gnubin:$PATH"
+
+  # krb5 / openssl@1.1（特定プロジェクトのビルド用。存在する場合のみ PATH に追加）
+  for _pkg in krb5 openssl@1.1; do
+    [[ -d "$BREW_PREFIX/opt/$_pkg/bin" ]] && export PATH="$BREW_PREFIX/opt/$_pkg/bin:$PATH"
+  done
+
+  # zlib（ビルドフラグ）
+  if [[ -d "$BREW_PREFIX/opt/zlib" ]]; then
+    export LDFLAGS="-L$BREW_PREFIX/opt/zlib/lib"
+    export CPPFLAGS="-I$BREW_PREFIX/opt/zlib/include"
+  fi
+
+  # pkg-config（存在するものだけ連結）
+  for _pkg in krb5 openssl@1.1 zlib; do
+    [[ -d "$BREW_PREFIX/opt/$_pkg/lib/pkgconfig" ]] && \
+      export PKG_CONFIG_PATH="$BREW_PREFIX/opt/$_pkg/lib/pkgconfig:$PKG_CONFIG_PATH"
+  done
+  unset _pkg
+fi
 
 # Google Cloud SDK
-if [ -f "$HOME/google-cloud-sdk/path.zsh.inc" ]; then
-  source "$HOME/google-cloud-sdk/path.zsh.inc"
-fi
-if [ -f "$HOME/google-cloud-sdk/completion.zsh.inc" ]; then
-  source "$HOME/google-cloud-sdk/completion.zsh.inc"
-fi
+[[ -f "$HOME/google-cloud-sdk/path.zsh.inc" ]] && source "$HOME/google-cloud-sdk/path.zsh.inc"
+[[ -f "$HOME/google-cloud-sdk/completion.zsh.inc" ]] && source "$HOME/google-cloud-sdk/completion.zsh.inc"
 
 # Antigravity
-export PATH="$HOME/.antigravity/antigravity/bin:$PATH"
+[[ -d "$HOME/.antigravity/antigravity/bin" ]] && \
+  export PATH="$HOME/.antigravity/antigravity/bin:$PATH"
 
-# switch-worktree など自作コマンド
-export PATH="$HOME/bin:$PATH"
+# 自作コマンド
+[[ -d "$HOME/bin" ]] && export PATH="$HOME/bin:$PATH"

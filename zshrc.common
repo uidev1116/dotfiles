@@ -13,6 +13,17 @@ if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
 fi
 
+# bun（インストール済みの場合のみ）
+if [[ -d "$HOME/.bun" ]]; then
+  export BUN_INSTALL="$HOME/.bun"
+  export PATH="$BUN_INSTALL/bin:$PATH"
+  [[ -s "$HOME/.bun/_bun" ]] && source "$HOME/.bun/_bun"
+fi
+
+# safe-chain（npm セキュリティ。インストール済みの場合のみ）
+[[ -f "$HOME/.safe-chain/scripts/init-posix.sh" ]] && \
+  source "$HOME/.safe-chain/scripts/init-posix.sh"
+
 # PC固有の設定を読み込む
 [[ -f "$HOME/.zshrc.local" ]] && source "$HOME/.zshrc.local"
 
