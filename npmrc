@@ -1,5 +1,4 @@
 prefix=/Users/uirikuto/.npm-global
 engine-strict=true
-ignore-scripts=true
 audit=true
 min-release-age=2
