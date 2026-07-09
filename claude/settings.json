@@ -21,6 +21,28 @@
           }
         ]
       }
+    ],
+    "SessionEnd": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/capture-dev-activity.sh"
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/capture-dev-activity.sh"
+          }
+        ]
+      }
     ]
   },
   "statusLine": {
@@ -33,7 +55,9 @@
     "freee-mcp@freee-mcp-marketplace": true,
     "basic-skills@appleple-agent-skills": true,
     "appleple-shared-skills@appleple-agent-skills": true,
-    "figma@claude-plugins-official": true
+    "figma@claude-plugins-official": true,
+    "codex@openai-codex": true,
+    "security-guidance@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "anthropic-agent-skills": {
@@ -52,6 +76,12 @@
       "source": {
         "source": "github",
         "repo": "appleple/appleple-agent-skills"
+      }
+    },
+    "openai-codex": {
+      "source": {
+        "source": "github",
+        "repo": "openai/codex-plugin-cc"
       }
     }
   },

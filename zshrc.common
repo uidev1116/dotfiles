@@ -5,6 +5,10 @@
 # Color
 export CLICOLOR=1
 
+# Editor
+export EDITOR=vim
+export VISUAL=vim
+
 # cursor cli / local bin
 export PATH="$HOME/.local/bin:$PATH"
 
@@ -30,3 +34,6 @@ fi
 # Kiro CLI post block. Keep at the bottom of this file.
 [[ -f "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.post.zsh" ]] && \
   builtin source "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.post.zsh"
+
+# Added by Antigravity CLI installer
+export PATH="/Users/uirikuto/.local/bin:$PATH"
