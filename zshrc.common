@@ -12,6 +12,10 @@ export VISUAL=vim
 # cursor cli / local bin
 export PATH="$HOME/.local/bin:$PATH"
 
+# Docker CLI の補完（Docker Desktop が追記する設定の置き換え）
+#   prezto の completion モジュールが compinit を呼ぶので、その前に fpath へ足す
+[[ -d "$HOME/.docker/completions" ]] && fpath=("$HOME/.docker/completions" $fpath)
+
 # Source Prezto
 if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"

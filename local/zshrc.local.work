@@ -11,6 +11,9 @@ fi
 # npm global
 export PATH="$HOME/.npm-global/bin:$PATH"
 
+# Docker Desktop（CLI のインストール先が User の場合。System なら /usr/local/bin に入るので不要）
+[[ -d "$HOME/.docker/bin" ]] && export PATH="$HOME/.docker/bin:$PATH"
+
 # Homebrew 関連（Intel: /usr/local, Apple Silicon: /opt/homebrew を自動判定）
 if command -v brew >/dev/null 2>&1; then
   BREW_PREFIX="$(brew --prefix)"
