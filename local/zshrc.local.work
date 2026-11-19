@@ -2,14 +2,14 @@
 # このファイルを ~/.zshrc.local としてリンク（または cp）して使う。
 # Intel / Apple Silicon どちらでも動くよう Homebrew prefix を動的に判定する。
 
+# npm global（nodenv の shims より前に置き、npm/npx は nodenv 管理のものを優先させる）
+export PATH="$HOME/.npm-global/bin:$PATH"
+
 # nodenv（インストール済みの場合のみ）
 if [[ -d "$HOME/.nodenv" ]]; then
   export PATH="$HOME/.nodenv/bin:$PATH"
   eval "$(nodenv init -)"
 fi
-
-# npm global
-export PATH="$HOME/.npm-global/bin:$PATH"
 
 # Docker Desktop（CLI のインストール先が User の場合。System なら /usr/local/bin に入るので不要）
 [[ -d "$HOME/.docker/bin" ]] && export PATH="$HOME/.docker/bin:$PATH"
