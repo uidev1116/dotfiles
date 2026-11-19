@@ -39,7 +39,7 @@ export NPM_TOKEN="npm_xxxxxxxx"   # npmjs.com で granular access token を発�
 | `agents/skills/` | AI エージェント共通スキル（実体） |
 | `npmrc` | npm設定（認証トークンを除く） |
 | `pnpm/rc` | pnpm設定 |
-| `zshrc.common` | zsh共通設定（zprezto・Kiro CLI・bun・safe-chain・local読み込み） |
+| `zshrc.common` | zsh共通設定（zprezto・inshellisense・bun・safe-chain・local読み込み） |
 | `zprezto/` | zshフレームワーク（git submodule） |
 | `local/*.personal` | 個人PC用ローカル設定 |
 | `local/*.work` | 会社PC用ローカル設定（Homebrew prefix を自動判定し Intel/Apple Silicon 両対応） |
