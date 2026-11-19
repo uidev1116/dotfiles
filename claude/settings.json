@@ -1,4 +1,8 @@
 {
+  "permissions": {
+    "defaultMode": "auto"
+  },
+  "model": "sonnet",
   "hooks": {
     "Notification": [
       {
@@ -40,6 +44,18 @@
           {
             "type": "command",
             "command": "bash ~/.claude/hooks/capture-dev-activity.sh"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash '/Users/uirikuto/.claude/hooks/herdr-agent-state.sh' session",
+            "timeout": 10
           }
         ]
       }
@@ -87,12 +103,13 @@
   },
   "language": "Japanese",
   "alwaysThinkingEnabled": true,
-  "effortLevel": "xhigh",
+  "effortLevel": "high",
   "voice": {
     "enabled": true,
     "mode": "hold"
   },
   "skipDangerousModePermissionPrompt": true,
+  "skipWorkflowUsageWarning": true,
   "skipAutoPermissionPrompt": true,
   "voiceEnabled": true
 }
